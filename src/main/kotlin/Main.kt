@@ -1,5 +1,4 @@
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -11,25 +10,20 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
-
+import androidx.compose.ui.window.singleWindowApplication
 
 @OptIn(ExperimentalComposeUiApi::class)
-fun main() = application {
-    Window(
-    onCloseRequest = ::exitApplication,
-    title = "Compose for Desktop",
-    state = rememberWindowState(width = 300.dp, height = 300.dp)
+fun main() = singleWindowApplication(
+    title = "Asteroids ComposeJB",
+    resizable = false,
 ) {
+
     val game = remember { Game() }
-    val density = LocalDensity.current
     LaunchedEffect(Unit) {
         while (true) {
             withFrameNanos {
@@ -38,39 +32,45 @@ fun main() = application {
         }
     }
 
-    Column(modifier = Modifier.background(Color(51, 153, 255)).fillMaxHeight()) {
+    Column(modifier = Modifier
+        .background(Color.DarkGray)
+        .fillMaxWidth()
+        .fillMaxHeight()
+    ) {
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Button({
                 game.startGame()
             }) {
                 Text("Play")
             }
-            Text(game.gameStatus, modifier = Modifier.align(Alignment.CenterVertically).padding(horizontal = 16.dp), color = Color.White)
+            Text(
+                game.gameStatus,
+                modifier = Modifier.align(Alignment.CenterVertically).padding(horizontal = 16.dp),
+                color = Color.White
+            )
         }
-        Box(modifier = Modifier
-            .aspectRatio(1.0f)
-            .background(Color(0, 0, 30))
-            .fillMaxWidth()
-            .fillMaxHeight()
+        Box(
+            modifier = Modifier
+                .aspectRatio(1.0f)
+                .background(Color.Black)
+                .fillMaxWidth()
+                .fillMaxHeight()
         ) {
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .clipToBounds()
-                .pointerMoveFilter(onMove = {
-                    with(density) {
-                        game.targetLocation  = DpOffset(it.x.toDp(), it.y.toDp())
+                .onPointerEvent(PointerEventType.Move) {
+                    with(it.changes.first().position) {
+                        game.targetLocation = DpOffset(x.dp, y.dp)
                     }
-                    false
-                })
-                .clickable() {
+                }
+                .onPointerEvent(PointerEventType.Press) {
                     game.ship.fire(game)
                 }
                 .onSizeChanged {
-                    with(density) {
-                        game.width = it.width.toDp()
-                        game.height = it.height.toDp()
-                    }
+                        game.width = it.width.dp
+                        game.height = it.height.dp
                 }) {
                 game.gameObjects.forEach {
                     when (it) {
@@ -82,5 +82,4 @@ fun main() = application {
             }
         }
     }
-}
 }
