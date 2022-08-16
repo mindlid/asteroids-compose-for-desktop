@@ -1,10 +1,9 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        mavenCentral()
-        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
-    
 }
+
 rootProject.name = "asteroids-for-desktop"
 

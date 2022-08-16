@@ -1,4 +1,3 @@
-import androidx.compose.desktop.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
@@ -15,10 +15,19 @@ import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
 
-fun main() = Window(size = IntSize(800, 900), title = "Asteroids for Desktop") {
+
+@OptIn(ExperimentalComposeUiApi::class)
+fun main() = application {
+    Window(
+    onCloseRequest = ::exitApplication,
+    title = "Compose for Desktop",
+    state = rememberWindowState(width = 300.dp, height = 300.dp)
+) {
     val game = remember { Game() }
     val density = LocalDensity.current
     LaunchedEffect(Unit) {
@@ -73,4 +82,5 @@ fun main() = Window(size = IntSize(800, 900), title = "Asteroids for Desktop") {
             }
         }
     }
+}
 }
