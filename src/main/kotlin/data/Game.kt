@@ -21,7 +21,7 @@ class Game {
     var prevTime = 0L
     val ship = ShipData()
 
-    var targetLocation by mutableStateOf<DpOffset>(DpOffset.Zero)
+    var targetLocation by mutableStateOf(DpOffset.Zero)
 
     var gameObjects = mutableStateListOf<GameObject>()
     var gameState by mutableStateOf(GameState.RUNNING)

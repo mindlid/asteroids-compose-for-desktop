@@ -43,7 +43,7 @@ sealed class GameObject(speed: Double = 0.0, angle: Double = 0.0, position: Vect
     }
 
     fun overlapsWith(other: GameObject): Boolean {
-        // Overlap means the the center of the game objects are closer together than the sum of their radiuses
+        // Overlap means the center of the game objects are closer together than the sum of their radiuses
         return this.position.distanceTo(other.position) < (this.size / 2 + other.size / 2)
     }
 }
