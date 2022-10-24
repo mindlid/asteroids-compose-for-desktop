@@ -77,6 +77,7 @@ fun main() = singleWindowApplication(
                         is ShipData -> Ship(it)
                         is BulletData -> Bullet(it)
                         is AsteroidData -> Asteroid(it)
+                        else -> {}
                     }
                 }
             }
